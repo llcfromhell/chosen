@@ -188,14 +188,18 @@ class AbstractChosen
         option.search_text = if option.group then option.label else option.html
 
         unless option.group and not @group_search
-          option.search_match = this.search_string_match(option.search_text, regex)
+          option.search_match = this.search_string_match(option.text, regex)
           results += 1 if option.search_match and not option.group
 
           if option.search_match
             if searchText.length
-              startpos = option.search_text.search highlightRegex
-              text = option.search_text.substr(0, startpos + searchText.length) + '</em>' + option.search_text.substr(startpos + searchText.length)
-              option.search_text = text.substr(0, startpos) + '<em>' + text.substr(startpos)
+              startpos = option.text.search highlightRegex
+              text = option.text.substr(0, startpos + searchText.length) + '</em>' + option.text.substr(startpos + searchText.length)
+              #option.search_text = text.substr(0, startpos) + '<em>' + text.substr(startpos)
+              highlightedText = text.substr(0, startpos) + '<em>' + text.substr(startpos)
+              html = option.html + ""
+              html = html.replace(option.text, highlightedText)
+              option.search_text = html
 
             results_group.group_match = true if results_group?
 
@@ -384,4 +388,3 @@ class AbstractChosen
   @default_multiple_text: "Select Some Options"
   @default_single_text: "Select an Option"
   @default_no_result_text: "No results match"
-
